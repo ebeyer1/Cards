@@ -4,6 +4,7 @@ using System.Collections;
 public class CardController : MonoBehaviour {
 	
 	public GameObject cardPrefab;
+	private static int activeCards = 0;
 	
 	void Awake() {
 		var iter = 0;
@@ -28,5 +29,17 @@ public class CardController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public static void IncrementActiveCards() {
+		++activeCards;
+	}
+
+	public static void DecrementActiveCards() {
+		--activeCards;
+	}
+
+	public static int ActiveCardsCount() {
+		return activeCards;
 	}
 }

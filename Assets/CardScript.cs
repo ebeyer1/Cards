@@ -10,6 +10,9 @@ public class CardScript : MonoBehaviour {
 	public Vector3 targetPosition;
 	private float _rotationSpeed = 7f;
 
+	private Vector3 prevPos;
+	private bool hoverEntered = false;
+
 	// Use this for initialization
 	void Start () {
 		initialPosition = this.transform.position;
@@ -30,18 +33,45 @@ public class CardScript : MonoBehaviour {
 
 			targetRotation = new Vector3(270f, 180f, transform.rotation.z);
 
-			targetPosition = new Vector3(0f,0f,0f);
+			float x = -5f + (CardController.ActiveCardsCount() * 2);
+			//float z = CardController.ActiveCardsCount() * -.1f;
 
-			isCardFlipped = true;
+			targetPosition = new Vector3(x,2f,0f);
+			CardController.IncrementActiveCards();
+
+			StartCoroutine(SwitchCardFlippedBool());
 		}
 		else {
 			startingRotation = transform.rotation.eulerAngles;
 
 			targetRotation = new Vector3(270f, 0f, transform.rotation.z);
+			CardController.DecrementActiveCards();
 
 			targetPosition = initialPosition;
 
-			isCardFlipped = false;
+			StartCoroutine(SwitchCardFlippedBool());
 		}
+	}
+
+	void OnMouseEnter() 
+	{
+		if (isCardFlipped && !hoverEntered) {
+			prevPos = transform.position;
+			targetPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
+			hoverEntered = true;
+		}
+	}
+
+	void OnMouseExit() {
+		if (isCardFlipped && hoverEntered) {
+			//targetPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1f);
+			targetPosition = prevPos;
+			hoverEntered = false;
+		}
+	}
+
+	private IEnumerator SwitchCardFlippedBool() {
+		yield return new WaitForSeconds (1);
+		isCardFlipped = !isCardFlipped;
 	}
 }
