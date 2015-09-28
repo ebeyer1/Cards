@@ -12,12 +12,12 @@ public class CardController : MonoBehaviour {
 		// linq.where(o => o is Material);
 		foreach (var material in materials) {
 			GameObject card = Instantiate (cardPrefab, new Vector3 (0, 0, 0), Quaternion.identity) as GameObject;
-			card.renderer.material = (material as Material);
+			card.GetComponent<Renderer>().material = (material as Material);
 			card.transform.rotation = Quaternion.Euler (new Vector3 (270, 0, 0));
 			var currPositionValue = iter++ / 10.0f;
 			card.transform.position = new Vector3 (currPositionValue-5f, currPositionValue-1.5f, currPositionValue);
 			card.AddComponent<BoxCollider> ();
-			card.AddComponent<CardScript> ();
+			card.AddComponent<CardScript> (); // Add custom script for custom behavior / properties
 		}
 	}
 	
